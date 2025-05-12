@@ -1,0 +1,8 @@
+pandas
+streamlit
+plotly
+plotnine
+scipy
+numpy
+pymannkendall
+geopy
