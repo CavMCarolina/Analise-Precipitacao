@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
+import plotly.express as px
 import numpy as np
 from sidebar import show_sidebar
 
@@ -304,5 +305,79 @@ else:
     )
 
     st.plotly_chart(fig)
+
+    st.divider()
+
+    st.header("Regressão das Médias de Estações e de Períodos:")
+    st.markdown("""
+        A regressão é uma técnica estatística usada para modelar a relação entre uma variável dependente (ou resposta) e uma ou mais variáveis independentes (ou explicativas). No presente trabalho, foram feitas duas análises de regressão utilizando combinações de variáveis climáticas com base na correlação entre elas.
+    """)
+
+    st.subheader("Regressão entre Precipitação no Inverno (JJA) e Dias Secos Consecutivos (CDD):")
+    st.markdown("""
+        Essa regressão apresentou um coeficiente de determinação (R²) de 0,33, indicando que apenas 33% da variância da variável resposta pode ser explicada pela variável preditora. Isso sugere uma relação moderada a fraca entre med_jja (média do inverno) e med_cdd (número de dias secos consecutivos). O erro (desvio padrão dos resíduos) foi de 8,68, o que indica uma dispersão relativamente alta entre os valores previstos e os valores observados. Isso pode estar associado à presença de outros fatores não considerados no modelo que influenciam significativamente a variável dependente.
+    """)
+
+    fig = px.scatter(df_filtrado,
+                    x='med_jja',
+                    y='med_cdd',
+                    color='nm',  # Color points by region
+                    hover_data=['nm', 'med_jja', 'med_cdd', 'med_anual'], # Add more data to hover
+                    title='Regressão entre Precipitação no Inverno (JJA) e Dias Secos Consecutivos (CDD) por Região',
+                    labels={'med_jja': 'Precipitação Média no Inverno (mm)', 'med_cdd': 'Média de Dias Secos Consecutivos'}) # Add labels for clarity
+
+    # Add the overall trendline
+    fig.add_trace(px.scatter(df_filtrado, x='med_jja', y='med_cdd', trendline="ols", trendline_color_override="black").data[1])
+
+    fig.update_layout(
+        hovermode='closest', # Improve hover behavior
+        legend_title_text='Região', # Add a title to the legend
+        xaxis=dict(
+            showgrid=True, # Show gridlines
+            gridcolor='lightgrey'
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='lightgrey'
+        )
+    )
+
+    st.plotly_chart(fig)
+
+    st.subheader("Regressão entre Precipitação no Verão (DJF) e Dias Chuvosos Consecutivos (CWD):")
+    st.markdown("""
+        Nesta análise, o modelo apresentou um R² de 0,45, ou seja, 45% da variação da variável resposta é explicada pela variável preditora. Trata-se de uma relação moderada, melhor do que a observada no primeiro modelo. Além disso, o erro dos resíduos foi de apenas 1,09, mostrando que as previsões estão muito mais próximas dos valores reais, o que indica um ajuste mais preciso e confiável.
+    """)
+
+    fig = px.scatter(df_filtrado,
+                 x='med_djf',
+                 y='med_cwd',
+                 color='nm',  # Color points by region
+                 hover_data=['nm', 'med_djf', 'med_cwd', 'med_anual'], # Add more data to hover
+                 title='Regressão entre Precipitação no Verão (DJF) e Dias Chuvosos Consecutivos (CWD) por Região',
+                 labels={'med_djf': 'Precipitação Média no Verão (mm)', 'med_cwd': 'Média de Dias Chuvosos Consecutivos'}) # Add labels for clarity
+
+    # Add the overall trendline
+    fig.add_trace(px.scatter(df_filtrado, x='med_djf', y='med_cwd', trendline="ols", trendline_color_override="black").data[1])
+
+    fig.update_layout(
+        hovermode='closest', # Improve hover behavior
+        legend_title_text='Região', # Add a title to the legend
+        xaxis=dict(
+            showgrid=True, # Show gridlines
+            gridcolor='lightgrey'
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='lightgrey'
+        )
+    )
+
+    st.plotly_chart(fig)
+
+    st.subheader("Resultado da Análise de Regressão:")
+    st.markdown("""
+        Entre os dois modelos testados, a regressão entre med_djf (média do verão) e med_cwd (número de dias úmidos consecutivos) apresentou desempenho superior, tanto em termos de explicação da variância quanto de precisão do modelo. Isso sugere que há uma associação mais forte entre essas variáveis e que o modelo pode ser útil para inferências ou previsões relacionadas a esse padrão climático específico.
+    """)
 
 show_sidebar()
