@@ -40,7 +40,7 @@ df_10 = top_10_chuvosos.sort_values(by='med_anual', ascending=False)
 df_10.set_index('nm', inplace=True)
 df_10 = df_10.drop('FRANCA  P11-140')
 
-st.header("Análise Regional da Precipitação:")
+st.header("Gráfico Regional da Precipitação:")
 
 st.markdown("""
     A análise regional da precipitação é fundamental para entender como as chuvas variam em diferentes áreas e como essas variações podem impactar a vida das pessoas e o meio ambiente. Os gráficos regionais construídos mostram a distribuição espacial das estações pluviométricas analisadas, com destaque para a média anual de precipitação de cada uma.
